@@ -1,0 +1,5 @@
+package com.springboot_practice.Spring.Entity;
+
+public class UserEntity {
+
+}

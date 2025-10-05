@@ -1,0 +1,167 @@
+1. Create a new database called company_db 
+create database company_db; 
+
+2. Select the company_db database for use 
+ use company_db; 
+
+3. Create a table named skills 
+create table skills ( 
+skill_id int identity(1,1) primary key, 
+skill_name varchar(100) not null, 
+category varchar(100) 
+); 
+
+4. Show all databases available on the SQL server 
+select name from sys.databases; 
+
+5. Show all tables in the company_db database 
+select name from sys.tables; 
+
+6. Rename the employee table to staff 
+exec sp_rename 'employee','staff'; 
+
+7.insert into employee (first_name,email,hire_date, salary,dept_id,gender) 
+values('Alice Green','alice.green@company.com','2024-01-10',62000.00,4,'female'); 
+
+8. insert multiple records into the project table 
+insert into project (project_name, budget, dept_id) 
+values 
+('Mobile App', 60000.00, 2), 
+('Training Program', 25000.00, 1); 
+
+9.Add a new department "Sales" located in "Boston" 
+insert into  department (dept_name, location) 
+values ('Sales', 'Boston'); 
+
+10.insert a record into the employee table with only first_name and email 
+insert into employee (first_name, email) 
+values('Tom', 'tom@company.com'); 
+
+11.Retrieve all records from the employee table 
+select *from employee; 
+
+12.Select specific columns with custom aliases 
+Select emp_id as [Employee ID], 
+first_name as [Name], 
+email as [Email Address],salary 
+from employee; 
+
+13.Retrieve all employees hired after January 1, 2023 
+select *from employee where  hire_date > '2023-01-01'; 
+
+14. List all projects with a budget greater than 40000.00, ordered by budget descending 
+select *from project where budget > 40000.00 
+order by budget DESC; 
+
+15. Show distinct locations from the department table 
+select distinct location from department; 
+
+16. Add a new column phone_number (varchar 15) to the employee table 
+alter table  employee add phone_number VARCHAR(15); 
+
+17. Update the salary of "John Doe" to 65000.00 
+update employee set salary = 65000.00 where first_name = 'john doe';
+
+18. Set gender = "Other" for all employees in IT department (dept_id = 2) 
+update employee set gender = 'other' where dept_id = 2; 
+
+19. Drop the phone_number column from the employee table 
+alter table employee drop column phone_number;
+
+20. Retrieve employees with a salary between 60000 and 80000 
+select * from employee where salary between 60000 and 80000;
+
+21. List employees whose first_name starts with "J" 
+select * from employee where first_name like 'j%';
+
+22. Find all projects where the dept_id is either 1 or 2 
+select * from project where dept_id in (1, 2);
+
+23. Show employees whose email is not NULL 
+select * from employee where email is not null;
+
+24. Retrieve departments not located in "New York" or "Chicago" 
+select * from department where location not in ('new york', 'chicago');
+
+25. List employees hired in the year 2023 using the hire_date column 
+select * from employee where year(hire_date) = 2023; 
+
+26. Calculate the total salary of all employees 
+select sum(salary) as [total salary] from employee;
+
+27. Find the average budget of all projects 
+ select avg(budget) as [average budget] from project;
+
+28. Determine the highest salary in the employee table 
+ select max(salary) as [highest salary] from employee;
+
+29. Count the number of employees in the IT department (dept_id = 2) 
+select count(*) as [it department employee count] from employee where dept_id = 2;
+
+30. Find the minimum budget among all projects 
+select min(budget) as [minimum budget] from project;
+
+31. Retrieve all employees along with their department names 
+select e.emp_id, e.first_name, e.email, e.salary, d.dept_name
+from employee e inner join department d on e.dept_id = d.dept_id;
+
+32. List all departments and the number of employees in each, 
+select d.dept_name,count(e.emp_id) as [employee count]
+from department d left join employee e on d.dept_id = e.dept_id group by d.dept_name;
+
+33. Show all projects along with the department names they belong to 
+select p.project_id, p.project_name, p.budget, d.dept_name from project p
+inner join department d on p.dept_id = d.dept_id;
+
+34. Find employees who work in departments located in "San Francisco" 
+select e.emp_id, e.first_name, e.email, e.salary, d.location
+from employee e inner join department d on e.dept_id = d.dept_id
+where d.location = 'san francisco';
+
+35. List departments that have no projects assigned to them 
+select d.dept_id, d.dept_name from department d left join project p 
+on d.dept_id = p.dept_id where p.dept_id is null;
+
+36. Concatenate first_name and last_name of employees with a space between them as "Full Name" 
+select concat(first_name, ' ', last_name) as "full name" from employees;
+
+37. Convert the dept_name column in the department table to uppercase 
+select upper(dept_name) as dept_name_upper from department;
+
+38. Extract the first 3 characters of each employee’s email 
+select substring(email, 1, 3) as first_three_chars from employees;
+
+39. Calculate the absolute value of -50000 
+select abs(-50000) as absolute_value;
+
+40. Round the average salary of employees to 2 decimal places 
+select round(avg(salary), 2) as avg_salary_rounded from employees;
+
+41. Limit the employee list to the first 3 records, ordered by hire_date descending 
+select top 3 * from employees order by hire_date desc;
+
+42. Retrieve the second page of employees (records 4–6) when paginating with 3 records per page, 
+ordered by emp_id 
+select * from employees order by emp_id offset 3 rows fetch next 3 rows only;
+
+43. Use IF to classify employee salaries as "High" if >= 70000, otherwise "Low" 
+select emp_id, first_name, salary, case when salary >= 70000 then 'high' else 'low' end as salary_category from employees;
+
+44. Use CASE to categorize project budgets: 
+select project_id, project_name, budget, case when budget >= 60000 then 'large'
+when budget >= 40000 then 'medium' else 'small' end as budget_category from projects;
+
+45. Find the total budget for projects in each department, grouped by dept_id 
+select dept_id, sum(budget) as total_budget from projects group by dept_id;
+
+46. Create a query to find the employee with the longest first_name using LENGTH 
+select top 1 first_name, len(first_name) as name_length from employees order by len(first_name) desc;
+
+47. Retrieve all employees whose hire date is within the last 90 days from the current date 
+select * from employees where hire_date >= dateadd(day, -90, getdate());
+
+48. Delete all employees with a salary less than 60000 
+delete from employees where salary < 60000;
+
+49. Drop the project table from the database 
+drop table projects;
